@@ -1,6 +1,6 @@
 {
   "name": "mock-path-with-spy-that-returns-x",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mocks a path with a spy that returns x",
   "main": "lib/index.js",
   "scripts": {
