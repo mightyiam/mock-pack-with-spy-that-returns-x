@@ -1,11 +1,11 @@
-[![Build Status](https://travis-ci.org/mightyiam/mock-path-with-spy-that-returns-x.svg?branch=master)](https://travis-ci.org/mightyiam/mock-path-with-spy-that-returns-x)
+[![Build Status](https://travis-ci.org/mightyiam/mock-path-with-simple-spy.svg?branch=master)](https://travis-ci.org/mightyiam/mock-path-with-simple-spy)
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-# mock-path-with-spy-that-returns-x
+# mock-path-with-simple-spy
 
 [Mocks](https://www.npmjs.com/package/mock-require)
 a given path with a
-[spy](https://www.npmjs.com/package/simple-spy)
+[simple spy](https://www.npmjs.com/package/simple-spy)
 that returns either a symbol or something provided by you.
 
 ## Why?
@@ -41,11 +41,11 @@ module.exports = (x) => dep(x) + '-foo'
 // unit tests here
 
 const assert = require('assert')
-const mockPathWithSpy = require('mock-path-with-spy-that-returns-x')
+const mockPathWithSimpleSpy = require('mock-path-with-simple-spy')
 const requireUncached = require('require-uncached')
 
 // set up a mock
-const depMocks = mockPathWithSpy(
+const depMocks = mockPathWithSimpleSpy(
   './dep', // path to mock
   'MOCKED' // mocked function return value
 )
@@ -67,7 +67,7 @@ assert.deepStrictEqual(depMockB.spy.args, [['b']])
 
 ### API
 
-#### `mockPathWithSpy(path[, constantReturn])` (generator)
+#### `mockPathWithSimpleSpy(path[, constantReturn])` (generator)
 
 - `path`  
   The path to mock.
