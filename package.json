@@ -1,5 +1,5 @@
 {
-  "name": "mock-path-with-spy-that-returns-x",
+  "name": "mock-path-with-simple-spy",
   "version": "2.0.0",
   "description": "Mocks a path with a spy that returns x",
   "main": "lib/index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mightyiam/mock-path-with-spy-that-returns-x.git"
+    "url": "git+https://github.com/mightyiam/mock-path-with-simple-spy.git"
   },
   "keywords": [
     "mock",
@@ -22,9 +22,9 @@
   "author": "Shahar Or <mightyiampresence@gmail.com> (mightyiam)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mightyiam/mock-path-with-spy-that-returns-x/issues"
+    "url": "https://github.com/mightyiam/mock-path-with-simple-spy/issues"
   },
-  "homepage": "https://github.com/mightyiam/mock-path-with-spy-that-returns-x#readme",
+  "homepage": "https://github.com/mightyiam/mock-path-with-simple-spy#readme",
   "devDependencies": {
     "ava": "^0.17.0",
     "decache": "^4.1.0",
