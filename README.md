@@ -12,7 +12,8 @@ that returns either a symbol or something provided by you.
 
 Because in unit tests, we mock some dependency functions.  
 And, usually, we like them to return a constant value.  
-And, usually, we like to assert their calls/args.
+And, usually, we like to assert their calls/args.  
+And, usually, we `require` the test subject multiple times.
 
 This utility fits that pattern.
 
@@ -20,59 +21,80 @@ This utility fits that pattern.
 
 ### Example
 
+#### `dep.js`
 ```js
-// dep.js
-module.exports = (x) => x + 'foo'
+// we will be mocking this file
+
+module.exports = (x) => x.toUpperCase()
 ```
 
+#### `index.js`
 ```js
-// index.js
+// this module will be our test subject
+
 const dep = require('./dep')
-module.exports = () => [dep('fee'), 'bar']
+module.exports = (x) => dep(x) + '-foo'
 ```
 
+#### `index.test.js`
 ```js
-// index.test.js
+// unit tests here
+
 const assert = require('assert')
 const mockPathWithSpy = require('mock-path-with-spy-that-returns-x')
+const requireUncached = require('require-uncached')
 
-const depMock = mockPathWithSpy('./dep', 'zanzi')
-const subject = require('.')
+// set up a mock
+const depMocks = mockPathWithSpy(
+  './dep', // path to mock
+  'MOCKED' // mocked function return value
+)
 
-const actual = subject()
-assert.deepStrictEqual(actual, ['zanzi', 'bar'])
+// test A
+const depMockA = depMocks.next().value // mock
+const subjectA = requireUncached('.')
+const actualA = subjectA('a')
+assert.strictEqual(actualA, 'MOCKED-foo') // `./dep` is mocked
+assert.deepStrictEqual(depMockA.spy.args, [['a']]) // spy available
 
-depMock.returnValue // 'zanzi'
-depMock.spy.args // [['fee']]
+// test B
+const depMockB = depMocks.next().value
+const subjectB = requireUncached('.')
+const actualB = subject('b')
+assert.strictEqual((actualB, 'MOCKED-foo')
+assert.deepStrictEqual(depMockB.spy.args, [['b']])
 ```
 
 ### API
 
-#### `mockPathWithSpy(path[, spyReturn])`
+#### `mockPathWithSpy(path[, constantReturn])` (generator)
 
-- `path`:
+- `path`  
   The path to mock.
   Will be passed to
   [`mock`](https://www.npmjs.com/package/mock-require#mockpath-mockexport).
-- `spyReturn`:
-  Optional.
-  If not provided, the spy will return a symbol.
-  The description of the symbol will be the `path`.
-  If provided, the spy will return this value.
+- `constantReturn` (optional)  
+  If provided, the spy will return provided value.  
+  If not provided, the spy will return a symbol
+  that is unique to each mock.  
+  The description of the symbols will be `path`.  
 
-Returns an object:
-- `spy`:
+Returns an iterator:  
+On `next`, the `path` is mocked with a new spy
+and an object is returned:
+- `spy`  
   The [simple-spy](https://www.npmjs.com/package/simple-spy)
   spy
-- `returnValue`:
-  The constant value that the spy will always return
-- `stop()`:
+- `spyReturn`  
+  The spy’s return value
+- `stop()`  
   Calls [`mock.stop`](https://github.com/boblauer/mock-require#mockstoppath)
   on the `path`
 
 ### Caveats
 
-Uses `module.parent` internally.
+#### Uses `module.parent`
+
 So it must always be `require`d
 directly in the module where it is used.
 This may be fixed by using
@@ -80,3 +102,10 @@ This may be fixed by using
 instead of `module.parent`,
 so please report an issue
 if you find that it bothers you.
+
+#### `require`s the mocked module
+
+The `path` is `require`d
+and the exported function’s length is examined,
+for the purpose of the mock function
+being of the same arity as the mocked function.
