@@ -6,7 +6,7 @@
 [Mocks](https://www.npmjs.com/package/mock-require)
 a given path with a
 [simple spy](https://www.npmjs.com/package/simple-spy)
-that returns either a symbol or something provided by you.
+that returns either a constant symbol or something provided by you.
 
 ## Why?
 
@@ -51,40 +51,38 @@ const depMocks = mockPathWithSimpleSpy(
 )
 
 // test A
-const depMockA = depMocks.next().value // mock
+const depSpyA = depMocks.next().value // mock
 const subjectA = requireUncached('.')
 const actualA = subjectA('a')
 assert.strictEqual(actualA, 'MOCKED-foo') // `./dep` is mocked
-assert.deepStrictEqual(depMockA.spy.args, [['a']]) // spy available
+assert.deepStrictEqual(depSpyA.args, [['a']]) // spy available
 
 // test B
-const depMockB = depMocks.next().value
+const depSpyB = depMocks.next().value
 const subjectB = requireUncached('.')
 const actualB = subject('b')
 assert.strictEqual((actualB, 'MOCKED-foo')
-assert.deepStrictEqual(depMockB.spy.args, [['b']])
+assert.deepStrictEqual(depSpyB.args, [['b']])
 ```
 
 ### API
 
-#### `mockPathWithSimpleSpy(path[, constantReturn])` (generator)
+#### `mockPathWithSimpleSpy(path[, spyReturn])` (not a generator function)
 
 - `path`  
   The path to mock.
   Will be passed to
   [`mock`](https://www.npmjs.com/package/mock-require#mockpath-mockexport).
-- `constantReturn` (optional)  
-  If provided, the spy will return provided value.  
-  If not provided, the spy will return a symbol
-  that is unique to each mock.  
-  The description of the symbols will be `path`.  
+- `spyReturn` (optional)  
+  If provided, all spies return provided value.  
+  If not provided, all spies share the same return value.
+  A symbol with `path` as its description.
 
-Returns an iterator:  
-On `next`, the `path` is mocked with a new spy
-and an object is returned:
-- `spy`  
-  The [simple-spy](https://www.npmjs.com/package/simple-spy)
-  spy
+Returns an iterator, with the following properties:
+- `next()`  
+On `next`, the `path` is mocked with a new
+[simple-spy](https://www.npmjs.com/package/simple-spy)
+and the spy is returned.
 - `spyReturn`  
   The spy’s return value
 - `stop()`  
