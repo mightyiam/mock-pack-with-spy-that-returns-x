@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/mightyiam/mock-path-with-simple-spy#readme",
   "devDependencies": {
-    "ava": "^0.23.0",
+    "ava": "^1.0.1",
     "decache": "^4.1.0",
     "is-generator-fn": "^1.0.0",
     "is-iterator-like": "^1.0.4",
