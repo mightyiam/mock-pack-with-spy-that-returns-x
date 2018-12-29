@@ -28,7 +28,7 @@
   "devDependencies": {
     "ava": "^0.23.0",
     "decache": "^4.1.0",
-    "is-generator-fn": "^1.0.0",
+    "is-generator-fn": "^2.0.0",
     "is-iterator-like": "^1.0.4",
     "mock-require": "^2.0.0",
     "no-op": "^1.0.3",
